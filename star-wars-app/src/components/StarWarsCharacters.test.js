@@ -1,16 +1,33 @@
 import React from "react";
+import "@testing-library/jest-dom"
 import { render, fireEvent, wait } from "@testing-library/react";
 import StarWarsCharacters from "./StarWarsCharacters";
+import { getData as mockData } from "../api";
 
-test(`renders the starwars API list of characters`, () => {
+jest.mock("../api");
 
- const { getByText } = render(<StarWarsCharacters />)
+ test(`next button loads next page of characters`, async () => {
+  mockData.mockResolvedValueOnce({ 
+    results: [{
+      name: ""
+    }],
+    next: "asd",
+    previous: "asd"
+  })
+  
+  const { findByText, getByText } = render(<StarWarsCharacters />)
 
- const next = getByText(/next/i);
- const previous = getByText(/previous/i);
+  const next = getByText(/next/i);
+  const previous = getByText(/previous/i);
 
- });
+  fireEvent.click(next)
+  fireEvent.click(previous)
 
+  expect(mockData).toHaveBeenCalledTimes(1);
+
+  wait(() => expect(!findByText(/anything/i)).toBeInDocument())
+
+ })
 
 
 
