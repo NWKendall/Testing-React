@@ -9,7 +9,7 @@ jest.mock("../api");
  test(`next button loads next page of characters`, async () => {
   mockData.mockResolvedValueOnce({ 
     results: [{
-      name: ""
+      name: "Luke Skywalker"
     }],
     next: "asd",
     previous: "asd"
@@ -20,12 +20,12 @@ jest.mock("../api");
   const next = getByText(/next/i);
   const previous = getByText(/previous/i);
 
-  fireEvent.click(next)
-  fireEvent.click(previous)
+  fireEvent.click(next);
+  fireEvent.click(previous);
 
   expect(mockData).toHaveBeenCalledTimes(1);
 
-  wait(() => expect(!findByText(/anything/i)).toBeInDocument())
+  await wait(() => expect(getdByText(/Luke/i)))
 
  })
 
